@@ -42,19 +42,46 @@ The process that manages the aircraft queue satisfies the following conditions.
         aircraft that was enqueued earlier has higher priority.
 */
 const ATCQueue = function () {
-	this.aircraftQueue = []
+    this.aircraftQueue = []
 }
 
 ATCQueue.prototype.aircraftCount = function () {
-
+    return this.aircraftQueue.length
 }
 
 ATCQueue.prototype.enqueue = function (aircraft) {
-
+    this.aircraftQueue.push(aircraft)
 }
 
 ATCQueue.prototype.dequeue = function () {
-    
+    let removedPlane = null
+    const largePassPlane = this.aircraftQueue.find(plane => {
+        plane.type == "passenger" && plane.size == "large"
+    })
+    const smallPassPlane = this.aircraftQueue.find(plane => {
+        plane.type == "passenger" && plane.size == "small"
+    })
+    const largeCargoPlane = this.aircraftQueue.find(plane => {
+        plane.type == "cargo" && plane.size == "large"
+    })
+    const smallCargoPlane = this.aircraftQueue.find(plane => {
+        plane.type == "cargo" && plane.size == "small"
+    })
+
+    if (largePassPlane) {
+        removedPlane = largePassPlane
+    } else if (smallPassPlane) {
+        removedPlane = smallPassPlane
+    } else if (largeCargoPlane) {
+        removedPlane = largeCargoPlane
+    } else if (smallCargoPlane) {
+        removedPlane = smallCargoPlane
+    } else {
+        return false
+    }
+
+    this.aircraftQueue.splice(this.aircraftQueue.indexOf(removedPlane), 1)
+
 }
 
 // DO NOT MODIFY
